@@ -1,27 +1,58 @@
 {
-  "name": "vue-electron-test",
+  "name": "benda",
   "version": "0.1.0",
+  "description": "testing bitches",
   "private": true,
+  "main": "public/electron_main.js",
+  "homepage": "./",
+  "alias": {
+    "vue": "./node_modules/vue/dist/vue.esm.js"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "electron-start": "wait-on tcp:8080 && electron-forge start",
+    "dev": "concurrently -k \"vue-cli-service serve\" \"npm:electron-start\"",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "dependencies": {
+    "bezier-js": "^4.0.3",
+    "bootstrap": "^4.5.3",
+    "bootstrap-vue": "^2.21.1",
     "core-js": "^3.8.1",
-    "vue": "^2.6.12"
+    "electron-is-dev": "^1.2.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "isdev": "^1.0.1",
+    "nedb": "^1.8.0",
+    "nedb-promises": "^4.1.0",
+    "vue": "^2.6.12",
+    "vue-router": "^3.4.9"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-deb": "^6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "@vue/cli-plugin-babel": "^4.5.9",
     "@vue/cli-plugin-eslint": "^4.5.9",
     "@vue/cli-service": "^4.5.9",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
+    "concurrently": "^5.3.0",
+    "electron": "^11.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-prettier": "^3.3.0",
     "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^5.0.0",
     "prettier": "^1.19.1",
-    "vue-template-compiler": "^2.6.12"
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0",
+    "vue-template-compiler": "^2.6.12",
+    "wait-on": "^5.2.0"
   },
   "eslintConfig": {
     "root": true,
@@ -42,5 +73,32 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "vue_electron_test"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  }
 }

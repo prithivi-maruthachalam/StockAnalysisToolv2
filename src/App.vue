@@ -1,28 +1,71 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <CustomHeader v-bind:usernickname="usernickname"/>
+    <router-view
+      v-bind:is_enable="is_Loading || is_LoadError || is_NoData"
+      v-bind:is_Loading="is_Loading"
+      v-bind:is_LoadError="is_LoadError"
+      v-bind:is_NoData="is_NoData"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import CustomHeader from "./components/header"
+const { ipcRenderer } = window.require("electron")
+
+var usernickname = "MM"
 
 export default {
   name: "App",
   components: {
-    HelloWorld
+    CustomHeader
+  },
+  data() { 
+    return{
+      usernickname: usernickname,
+      is_Loading: true,
+      poolData: {},
+      is_LoadError: false,
+      is_NoData: false 
+  }},
+  //lifecycle hooks
+  created() {
+    ipcRenderer.send("render:started")
+    this.is_Loading = true
+    this.is_LoadError = false
+    this.is_NoData = false
+  },
+  mounted(){
+    ipcRenderer.on("main:pool-data-return", (event,data) => {
+      if(!data){
+        this.is_Loading = false
+        this.is_LoadError = true
+      } else if(data.dataLength == 0){
+        this.is_Loading = false
+        this.is_NoData = true
+      } else {
+        this.is_Loading = false
+        this.poolData = data
+      }
+    })
   }
 };
+
 </script>
 
-<style>
+<style lang="scss">
+@import "./scss/variables.scss";
+body, html {
+  height: 100%;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 </style>
