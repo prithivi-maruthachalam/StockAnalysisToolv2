@@ -86,6 +86,16 @@
                             >
                                 Custom Normalisation?
                             </b-form-checkbox>
+                            <b-form-group
+                                v-if="rule.ruleType && rule.function == 'custom'"
+                                class="normalTargetGroup"
+                                label="Drag the point to set the shape of your custom curve"
+                            >
+                                <CurveCanvas
+                                    v-bind:realStart="rule.start"
+                                    v-bind:realEnd="rule.end"
+                                ></CurveCanvas>
+                            </b-form-group>
                             <b-form-group 
                                 class="normalTargetGroup" 
                                 :label="(rule.ruleType == 'range') ? 'Enter the start and end values here' : 'Enter one value for this rule'"
@@ -130,8 +140,13 @@
 </template>
 
 <script>
+import CurveCanvas from "./curveCanvas"
+
 export default {
     name: "ColumnForm",
+    components:{
+        CurveCanvas
+    },
     data(){
         return{
             form:{
