@@ -7,7 +7,9 @@
     >
 
     </canvas>
-        <span style="display:none">{{real_vals[0]}}</span>
+        <span style="display:none">
+            {{real_vals[0]}}
+        </span>
     </span>
 </template>
 
@@ -61,12 +63,16 @@ export default {
             this.constants.start[1] + 30
         )
         this.context.fill()
-
-        console.log(this.constants.start,this.constants.end);
     },
     updated(){
-        console.log("Updating")
-        console.log(this.real_vals)
+        if(this.ruleType == 'range'){
+            this.realValues = this.real_vals
+        } else if(this.ruleType == 'greaterThan'){
+            this.realValues = [this.real_vals[0],"INF"]
+        } else if(this.ruleType == "lessThan"){
+            this.realValues = ["-INF",this.real_vals[1]]
+        }
+
         this.context.clearRect(
             0,this.constants.start[1] + 20,
             this.canvasref.width,
@@ -77,12 +83,12 @@ export default {
         this.context.font = "15px Arial"
         this.context.fillStyle = "#435a6b";
         this.context.fillText(
-            this.real_vals[0],
+            this.realValues[0],
             this.constants.start[0] - 5,
             this.constants.start[1] + 30
         )
         this.context.fillText(
-            this.real_vals[1],
+            this.realValues[1],
             this.constants.end[0] - 15,
             this.constants.start[1] + 30
         )
@@ -100,11 +106,13 @@ export default {
                 sizeOfGraph: this.graphSize
             },
             isDragging: false,
+            realValues: this.real_vals
         }
     },
     props: {
         real_vals: Array,
         graphSize: Number,
+        ruleType: String
     },
     methods: {
         canvasMouse(event){
@@ -116,6 +124,51 @@ export default {
             ){
                 this.coords = [event.offsetX,event.offsetY]
                 this.redraw()
+            }
+        },
+        drawGraphStuff(newVal){
+            if(newVal == 'lessThan'){
+                this.context.clearRect(
+                    0,this.constants.start[1] + 20,
+                    this.canvasref.width,
+                    this.canvasref.height - (this.constants.start[1] + 20)
+                )
+                
+                this.context.beginPath()
+                this.context.font = "15px Arial"
+                this.context.fillStyle = "#435a6b";
+                this.context.fillText(
+                    "-INF",
+                    this.constants.start[0] - 5,
+                    this.constants.start[1] + 30
+                )
+                this.context.fillText(
+                    this.real_vals[1],
+                    this.constants.end[0] - 15,
+                    this.constants.start[1] + 30
+                )
+                this.context.fill()
+            } else if(newVal == 'oldVal'){
+                this.context.clearRect(
+                    0,this.constants.start[1] + 20,
+                    this.canvasref.width,
+                    this.canvasref.height - (this.constants.start[1] + 20)
+                )
+                
+                this.context.beginPath()
+                this.context.font = "15px Arial"
+                this.context.fillStyle = "#435a6b";
+                this.context.fillText(
+                    this.real_vals[0],
+                    this.constants.start[0] - 5,
+                    this.constants.start[1] + 30
+                )
+                this.context.fillText(
+                    "INF",
+                    this.constants.end[0] - 15,
+                    this.constants.start[1] + 30
+                )
+                this.context.fill()   
             }
         },
         redraw(){

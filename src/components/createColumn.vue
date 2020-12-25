@@ -94,6 +94,7 @@
                                 <CurveCanvas
                                     v-bind:real_vals="[rule.start,rule.end]"
                                     v-bind:graphSize="350"
+                                    v-bind:ruleType="rule.ruleType"
                                 ></CurveCanvas>
                             </b-form-group>
                             <b-form-group 
@@ -218,7 +219,7 @@ export default {
             var flag = true
             if(this.form.isNormalise == 'isNormalise'){
                 this.form.normalisation_rules.forEach(rule => {
-                    if(rule.ruleType == "" || rule.start == rule.end){
+                    if(rule.ruleType == "" || rule.start == rule.end || rule.start == "" || rule.end == ""){
                         flag = false
                     }
                 });
