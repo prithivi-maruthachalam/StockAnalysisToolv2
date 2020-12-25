@@ -231,7 +231,7 @@ export default {
             var flag = true
             if(this.form.isNormalise == 'isNormalise'){
                 this.form.normalisation_rules.forEach(rule => {
-                    if(rule.ruleType == "" || rule.start == rule.end || rule.start == "" || rule.end == ""){
+                    if(rule.ruleType == "" || (rule.ruleType == "range" && rule.start == rule.end) || rule.start == "" || rule.end == ""){
                         flag = false
                     }
                 });
