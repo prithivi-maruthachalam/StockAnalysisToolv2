@@ -1,4 +1,5 @@
 <template>
+    <span>
     <canvas ref="canvasRef" height="400" width="400"
         @mousemove="canvasMouse"
         @mousedown="(e)=>{isDragging = true;canvasMouse(e)}"
@@ -6,6 +7,8 @@
     >
 
     </canvas>
+        <span style="display:none">{{real_vals[0]}}</span>
+    </span>
 </template>
 
 <script>
@@ -15,12 +18,10 @@ export default {
         this.canvasref = this.$refs.canvasRef
         this.context = this.canvasref.getContext("2d")
 
-        let x = (this.canvasref.width - 340)/2
+        let x = (this.canvasref.width - this.graphSize)/2
         let y = this.canvasref.height - x
         this.constants.start = [x,y]
         this.constants.end = [y,x]
-        console.log(this.constants.start,this.constants.end)
-
 
         this.context.beginPath();
         this.context.rect(
@@ -44,6 +45,26 @@ export default {
         this.context.beginPath()
         this.context.arc(250,250,3,0,Math.PI * 2)
         this.context.fill()
+
+
+        this.context.beginPath()
+        this.context.font = "15px Arial"
+        this.context.fillStyle = "#435a6b";
+        this.context.fillText(
+            this.real_vals[0],
+            this.constants.start[0] - 5,
+            this.constants.start[1] + 18
+        )
+        this.context.fillText(
+            this.real_vals[1],
+            this.constants.end[0] - 15,
+            this.constants.start[1] + 18
+        )
+        this.context.fill()
+    },
+    updated(){
+        console.log("Updating")
+        console.log(this.real_vals)
     },
     data(){
         return{
@@ -53,18 +74,15 @@ export default {
             constants: {
                 start: [0,0],
                 end: [0, 0],
-                radius: 10
+                radius: 10,
+                sizeOfGraph: this.graphSize
             },
             isDragging: false,
-            realCoords : {
-                start: this.realStart,
-                end: this.realEnd
-            }
         }
     },
     props: {
-        realStart: Number,
-        realEnd: Number
+        real_vals: Array,
+        graphSize: Number,
     },
     methods: {
         canvasMouse(event){
@@ -79,7 +97,12 @@ export default {
             }
         },
         redraw(){
-            this.context.clearRect(0,0,this.canvasref.width, this.canvasref.height)
+            this.context.clearRect(
+                0,
+                this.constants.start[0] + 5,
+                this.canvasref.width, 
+                340
+            )
             
             this.context.beginPath();
             this.context.rect(

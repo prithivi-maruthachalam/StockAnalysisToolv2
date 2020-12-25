@@ -92,8 +92,8 @@
                                 label="Drag the point to set the shape of your custom curve"
                             >
                                 <CurveCanvas
-                                    v-bind:realStart="rule.start"
-                                    v-bind:realEnd="rule.end"
+                                    v-bind:real_vals="[rule.start,rule.end]"
+                                    v-bind:graphSize="350"
                                 ></CurveCanvas>
                             </b-form-group>
                             <b-form-group 
@@ -183,6 +183,8 @@ export default {
                     rule.n_start = rule.n_end
                 }
             })
+
+            alert(JSON.stringify(this.form))
         },
 
         addNormal(){
@@ -193,8 +195,8 @@ export default {
                 key: ++this.count,
                 ruleType: "",
                 function: "linear",
-                start: 0,
-                end: 0,
+                start: "0",
+                end: "0",
                 n_start: 0,
                 n_end: 0
             })
