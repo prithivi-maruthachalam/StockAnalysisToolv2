@@ -126,51 +126,6 @@ export default {
                 this.redraw()
             }
         },
-        drawGraphStuff(newVal){
-            if(newVal == 'lessThan'){
-                this.context.clearRect(
-                    0,this.constants.start[1] + 20,
-                    this.canvasref.width,
-                    this.canvasref.height - (this.constants.start[1] + 20)
-                )
-                
-                this.context.beginPath()
-                this.context.font = "15px Arial"
-                this.context.fillStyle = "#435a6b";
-                this.context.fillText(
-                    "-INF",
-                    this.constants.start[0] - 5,
-                    this.constants.start[1] + 30
-                )
-                this.context.fillText(
-                    this.real_vals[1],
-                    this.constants.end[0] - 15,
-                    this.constants.start[1] + 30
-                )
-                this.context.fill()
-            } else if(newVal == 'oldVal'){
-                this.context.clearRect(
-                    0,this.constants.start[1] + 20,
-                    this.canvasref.width,
-                    this.canvasref.height - (this.constants.start[1] + 20)
-                )
-                
-                this.context.beginPath()
-                this.context.font = "15px Arial"
-                this.context.fillStyle = "#435a6b";
-                this.context.fillText(
-                    this.real_vals[0],
-                    this.constants.start[0] - 5,
-                    this.constants.start[1] + 30
-                )
-                this.context.fillText(
-                    "INF",
-                    this.constants.end[0] - 15,
-                    this.constants.start[1] + 30
-                )
-                this.context.fill()   
-            }
-        },
         redraw(){
             this.context.clearRect(
                 0,

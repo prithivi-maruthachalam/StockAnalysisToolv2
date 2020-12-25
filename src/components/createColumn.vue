@@ -7,14 +7,22 @@
                 v-model="form.name"
                 type="text"
                 placeholder="Enter column name"
+                :state="name_validate"
             />
+            <b-form-invalid-feedback :state="name_validate">
+                You haven't entered a name
+            </b-form-invalid-feedback>
         </b-form-group>
         <b-form-group id="col_type_group" label="Choose a type">
             <b-form-select 
                 id="col_type"
                 v-model="form.type"
                 :options="typeOptions"
+                :state="type_validate"
             />
+            <b-form-invalid-feedback :state="type_validate">
+                Choose a type
+            </b-form-invalid-feedback>
         </b-form-group>
         <b-form-group 
             id="col_is_core_group" 
@@ -33,7 +41,11 @@
                 id="col_weight"
                 type="number"
                 v-model="form.weight"
+                :state="weight_validate"
             />
+            <b-form-invalid-feedback :state="weight_validate">
+                Weight can't be less than one
+            </b-form-invalid-feedback>
         </b-form-group>
         <b-form-group v-if="form.isCore == 'isCore'" id="col_isNormalise_group" label="Do you want to add normalisation rules?">
             <b-button @click="addNormal" variant="success">
@@ -121,7 +133,7 @@
             </b-list-group>
         </b-form-group>
         <b-form-group 
-            :disabled="!(form.name && form.type && (form.isCore == 'isNotCore' || (form.isCore == 'isCore' && form.weight > 0)) && checkNormalisationRules())"
+            :disabled="!(weight_validate && name_validate && type_validate && checkNormalisationRules())"
             label="Click the button after you're done">
             <b-button
                 type="submit"
@@ -130,11 +142,6 @@
             >
                 Add Column
             </b-button>
-            <b-form-text class="warning"
-                v-if="!(form.name && form.type && (form.isCore == 'isNotCore' || (form.isCore == 'isCore' && form.weight > 0)))"
-            >
-                You haven't {{helper()}}
-            </b-form-text>
         </b-form-group>
     </b-form>
     </div>    
@@ -170,6 +177,17 @@ export default {
                 {value: "range", text: "Between 2 values"}
             ],
             count: 0
+        }
+    },
+    computed: {
+        name_validate(){
+            return this.form.name != ""
+        },
+        type_validate(){
+            return this.form.type != ""
+        },
+        weight_validate(){
+            return (this.form.isCore == "isNotCore" || this.form.isCore == "isCore" && (this.form.weight >= 1))
         }
     },
     methods:{
@@ -208,12 +226,6 @@ export default {
             this.form.normalisation_rules.splice(index,1)
             if(this.form.normalisation_rules.length == 0)
                 this.form.isNormalise = "isNotNormalise"
-        },
-
-        helper(){
-            if(!this.form.name) return "entered a name for the column"
-            else if(!this.form.type) return "chosen a type"
-            else if(this.form.isCore == 'isCore' && this.form.weight < 1) return "entered a valid weight"
         },
         checkNormalisationRules(){
             var flag = true
