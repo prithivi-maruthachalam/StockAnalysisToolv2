@@ -1,6 +1,6 @@
 <template>
     <span>
-    <canvas ref="canvasRef" height="400" width="400"
+    <canvas ref="canvasRef" height="425" width="400"
         @mousemove="canvasMouse"
         @mousedown="(e)=>{isDragging = true;canvasMouse(e)}"
         @mouseup="(e)=>{isDragging = false}"
@@ -19,7 +19,7 @@ export default {
         this.context = this.canvasref.getContext("2d")
 
         let x = (this.canvasref.width - this.graphSize)/2
-        let y = this.canvasref.height - x
+        let y = this.canvasref.height - 2*x
         this.constants.start = [x,y]
         this.constants.end = [y,x]
 
@@ -53,14 +53,16 @@ export default {
         this.context.fillText(
             this.real_vals[0],
             this.constants.start[0] - 5,
-            this.constants.start[1] + 18
+            this.constants.start[1] + 30
         )
         this.context.fillText(
             this.real_vals[1],
             this.constants.end[0] - 15,
-            this.constants.start[1] + 18
+            this.constants.start[1] + 30
         )
         this.context.fill()
+
+        console.log(this.constants.start,this.constants.end);
     },
     updated(){
         console.log("Updating")
@@ -99,9 +101,9 @@ export default {
         redraw(){
             this.context.clearRect(
                 0,
-                this.constants.start[0] + 5,
+                0,
                 this.canvasref.width, 
-                340
+                this.constants.start[1] + 20
             )
             
             this.context.beginPath();
