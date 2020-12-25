@@ -67,6 +67,26 @@ export default {
     updated(){
         console.log("Updating")
         console.log(this.real_vals)
+        this.context.clearRect(
+            0,this.constants.start[1] + 20,
+            this.canvasref.width,
+            this.canvasref.height - (this.constants.start[1] + 20)
+        )
+        
+        this.context.beginPath()
+        this.context.font = "15px Arial"
+        this.context.fillStyle = "#435a6b";
+        this.context.fillText(
+            this.real_vals[0],
+            this.constants.start[0] - 5,
+            this.constants.start[1] + 30
+        )
+        this.context.fillText(
+            this.real_vals[1],
+            this.constants.end[0] - 15,
+            this.constants.start[1] + 30
+        )
+        this.context.fill()
     },
     data(){
         return{
