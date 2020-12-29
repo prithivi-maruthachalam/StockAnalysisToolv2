@@ -1,78 +1,95 @@
 <template>
     <div>
-    <b-form @submit="onSubmit">
-        <b-form-group id="col_name_group" label="Enter name of column">
-            <b-form-input
-                id="col_name"
-                v-model="form.name"
-                type="text"
-                placeholder="Enter column name"
-                :state="name_validate"
-            />
-            <b-form-invalid-feedback :state="name_validate">
-                You haven't entered a name
-            </b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group id="col_type_group" label="Choose a type">
-            <b-form-select 
-                id="col_type"
-                v-model="form.type"
-                :options="typeOptions"
-                :state="type_validate"
-            />
-            <b-form-invalid-feedback :state="type_validate">
-                Choose a type
-            </b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group 
-            id="col_is_core_group" 
-            label="Should this be a core coloumn?"
-            v-if="form.type != 'string'"
-        >
-            <b-form-checkbox
-                id="col_is_core"
-                v-model="form.isCore"
-                value="isCore"
-                unchecked-value="isNotCore"
-            >Make this a core column</b-form-checkbox>
-        </b-form-group>
-        <b-form-group v-if="form.isCore == 'isCore'" id="col_weight_group" label="Enter weight for this coloumn">
-            <b-form-input
-                id="col_weight"
-                type="number"
-                v-model="form.weight"
-                :state="weight_validate"
-            />
-            <b-form-invalid-feedback :state="weight_validate">
-                Weight can't be less than one
-            </b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group v-if="form.isCore == 'isCore'" id="col_isNormalise_group" label="Do you want to add normalisation rules?">
-            <b-button @click="addNormal" variant="success">
-                Add Normalisation rule
-            </b-button>
-        </b-form-group>
-        <b-form-group v-if="form.normalisation_rules.length" id="col_normal_rules_group" v-bind:label="'Normalisation rules for ' + form.name">
-            <b-list-group>
-                <b-list-group-item class="listItem" v-for="rule of form.normalisation_rules" :key="rule.key">
-                    <AddNormalRule
-
-                    />
-                </b-list-group-item>
-            </b-list-group>
-        </b-form-group>
-        <b-form-group 
-            :disabled="!(weight_validate && name_validate && type_validate)"
-            label="Click the button after you're done">
-            <b-button
-                type="submit"
-                variant="primary"
-                size="lg"
+        <b-form @submit="onSubmit">
+            <b-form-group id="col_name_group" 
+                label="Enter name of column"
             >
-                Add Column
-            </b-button>
-        </b-form-group>
-    </b-form>
+                <b-form-input
+                    id="col_name"
+                    v-model="form.name"
+                    type="text"
+                    placeholder="Enter column name"
+                    :state="name_validate"
+                />
+                <b-form-invalid-feedback :state="name_validate">
+                    You haven't entered a name
+                </b-form-invalid-feedback>
+            </b-form-group>
+
+            <b-form-group id="col_type_group" 
+                label="Choose a type"
+            >
+                <b-form-select 
+                    id="col_type"
+                    v-model="form.type"
+                    :options="typeOptions"
+                    :state="type_validate"
+                />
+                <b-form-invalid-feedback :state="type_validate">
+                    Choose a type
+                </b-form-invalid-feedback>
+            </b-form-group>
+
+            <b-form-group id="col_is_core_group" 
+                label="Should this be a core coloumn?"
+                v-if="form.type != 'string'"
+            >
+                <b-form-checkbox
+                    id="col_is_core"
+                    v-model="form.isCore"
+                    value="isCore"
+                    unchecked-value="isNotCore"
+                >Make this a core column</b-form-checkbox>
+            </b-form-group>
+
+            <b-form-group id="col_weight_group" 
+                label="Enter weight for this coloumn"
+                v-if="form.isCore == 'isCore'"
+            >
+                <b-form-input
+                    id="col_weight"
+                    type="number"
+                    v-model="form.weight"
+                    :state="weight_validate"
+                />
+                <b-form-invalid-feedback :state="weight_validate">
+                    Weight can't be less than one
+                </b-form-invalid-feedback>
+            </b-form-group>
+
+            <b-form-group id="col_isNormalise_group" 
+                label="Do you want to add normalisation rules?"
+                v-if="form.isCore == 'isCore'" 
+            >
+                <b-button @click="addNormal" variant="success">
+                    Create new normalisation rule
+                </b-button>
+            </b-form-group>
+
+            <b-form-group id="col_normal_rules_group" 
+                v-bind:label="'Normalisation rules for ' + form.name"
+                v-if="form.normalisation_rules.length" 
+            >
+                <b-list-group>
+                    <b-list-group-item class="listItem" v-for="rule of form.normalisation_rules" :key="rule.key">
+                        <AddNormalRule/>
+                    </b-list-group-item>
+                </b-list-group>
+            </b-form-group>
+
+            <b-form-group id="save_button_group"
+                :disabled="!(weight_validate && name_validate && type_validate)"
+                label="Click the button after you're done"
+            >
+                <b-button
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                >
+                    Save Column
+                </b-button>
+            </b-form-group>
+        </b-form>
     </div>    
 </template>
 

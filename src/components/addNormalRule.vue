@@ -1,14 +1,13 @@
 <template>
     <div>
-        <b-form inline>
+        <b-form id="start_values_form" inline>
             <b-form-select class="topSelect" 
                 :options="ruleOptions" 
                 v-model="rule.ruleType"
             />
-            <span v-if="rule.ruleType">
                 <label class="inLabel d-inline">from</label>
                 <label 
-                    class="labelHighlight d-inline"
+                    class="labelHighlight d-inline inLabel"
                     v-if="rule.ruleType == 'lessThan'"
                 >negative infinity</label>
                 <b-form-input class="normalNum d-inline"
@@ -16,8 +15,7 @@
                     v-model="rule.start"
                     type="number"
                 />
-            </span>
-            <span v-if="rule.ruleType">
+
                 <label class="inLabel d-inline">to</label>
                 <label 
                     class="labelHighlight d-inline"
@@ -28,15 +26,9 @@
                     v-model="rule.end"
                     type="number"
                 />
-            </span>
         </b-form>
-            
-        <b-button class="deleteBtn" @click="deleteRule(rule.key)"
-            v-if="false"
-            variant="danger"
-        >
-            Delete rule<b-icon-x-circle class="btnIcon"/>
-        </b-button>
+        <b-form-invalid-feedback :state="startValuesCheck">Start and end values cannot be the same</b-form-invalid-feedback>
+        <b-form-invalid-feedback :state="(endCheck && startCheck)">Start and end values cannot be empty</b-form-invalid-feedback>
             
         <b-form-group class="checkboxGroup">
             <b-form-checkbox
@@ -48,21 +40,9 @@
             </b-form-checkbox>
         </b-form-group>
 
-        <b-form-group
-            v-if="rule.ruleType && rule.function == 'custom'"
-            class="normalTargetGroup"
-            label="Drag the point to set the shape of your custom curve"
-        >
-            <CurveCanvas
-                v-bind:real_vals="[rule.start,rule.end]"
-                v-bind:graphSize="350"
-                v-bind:ruleType="rule.ruleType"
-            ></CurveCanvas>
-        </b-form-group>
-
-        <b-form-group 
+        <b-form-group id="end_values_group"
             :label="(rule.ruleType == 'range') ? 'Enter the start and end values here' : 'Enter one value for this rule'"
-            v-if="rule.function == 'linear' && rule.ruleType"
+            v-if="rule.ruleType"
         >
             <b-form inline>
                 <label v-if="rule.ruleType == 'range'" class="inLabel">from</label>
@@ -78,7 +58,28 @@
                     type="number"
                 />
             </b-form>
+            <b-form-invalid-feedback :state="(n_startCheck && n_endCheck)">
+                Values cannot be empty
+            </b-form-invalid-feedback>
         </b-form-group>
+
+        <b-form-group id="curveCanvas_group"
+            v-if="rule.ruleType && rule.function == 'custom'"
+            class="normalTargetGroup"
+            label="Drag the point to set the shape of your custom curve"
+        >
+            <CurveCanvas
+                v-bind:real_vals="[rule.start,rule.end]"
+                v-bind:graphSize="350"
+                v-bind:ruleType="rule.ruleType"
+            ></CurveCanvas>
+        </b-form-group>
+
+
+        <b-form inline>
+            <b-button variant="info mr-3">Confirm</b-button>
+            <b-button variant="danger">Delete</b-button>
+        </b-form>
     </div>
 </template>
 
@@ -90,6 +91,26 @@ export default {
     name: "AddNormalRule",
     components:{
         CurveCanvas
+    },computed: {
+        startValuesCheck(){
+            //returns false if they are equal
+            return this.rule.start != this.rule.end
+        },
+        startCheck(){
+            //returns false if empty
+            return this.rule.start != ""
+        },
+        endCheck(){
+            //returns false if empty
+            return this.rule.end != ""
+        },
+        n_startCheck(){
+            //returns false if empty
+            return this.rule.n_start != ""
+        },
+        n_endCheck(){
+            return this.rule.n_end != ""
+        }
     },
     data(){
         return{
@@ -98,8 +119,8 @@ export default {
                 start: "0",
                 end: "0",
                 function: "linear",
-                n_start: 0,
-                n_end: 0
+                n_start: "0",
+                n_end: "0"
             },
             ruleOptions: [
                 {value: "greaterThan", text: "Greater than"},
