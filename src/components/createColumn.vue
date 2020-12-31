@@ -77,12 +77,16 @@
                             @addNormalRule:create="createRule($event)"
                             @addNormalRule:delete="deleteRule($event)"
                         />
+                        <Badge 
+                            content="unsaved"
+                            v-if="!rules_validate"
+                        />
                     </b-list-group-item>
                 </b-list-group>
             </b-form-group>
 
             <b-form-group id="save_button_group"
-                :disabled="!(weight_validate && name_validate && type_validate)"
+                :disabled="!(weight_validate && name_validate && type_validate && rules_validate)"
                 label="Click the button after you're done"
             >
                 <b-button
@@ -99,11 +103,13 @@
 
 <script>
 import AddNormalRule from "./addNormalRule"
+import Badge from "./badge"
 
 export default {
     name: "ColumnForm",
     components:{
-        AddNormalRule
+        AddNormalRule,
+        Badge
     },
     data(){
         return{
@@ -125,6 +131,7 @@ export default {
         }
     },
     computed: {
+        //false indicates an invalid input
         name_validate(){
             return this.form.name != ""
         },
@@ -133,6 +140,13 @@ export default {
         },
         weight_validate(){
             return (this.form.isCore == "isNotCore" || this.form.isCore == "isCore" && (this.form.weight >= 1))
+        },
+        rules_validate(){
+            let flag = false
+            this.form.normalisation_rules.forEach(rule => {
+                if(!rule.validation) flag = true
+            })
+            return !flag
         }
     },
     methods:{
@@ -152,7 +166,8 @@ export default {
                 start: "0",
                 end: "0",
                 n_start: 0,
-                n_end: 0
+                n_end: 0,
+                validation: false
             })
         },
 
@@ -161,12 +176,15 @@ export default {
             this.form.normalisation_rules.splice(index,1)
             if(this.form.normalisation_rules.length == 0)
                 this.form.isNormalise = "isNotNormalise"
+
+            console.log(this.form.normalisation_rules)
         },
 
         createRule(event){
             var index = this.form.normalisation_rules.findIndex((rule)=>rule.key == event.key)
-            this.form.normalisation_rules[]
-
+            Object.assign(this.form.normalisation_rules[index],event)
+            this.form.normalisation_rules[index].validation = true
+            console.log(this.form.normalisation_rules)
         }
     }
 }
