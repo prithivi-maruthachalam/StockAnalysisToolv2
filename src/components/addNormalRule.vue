@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Index :ruleIndex="ruleIndex"/>
         <b-form id="start_values_form" inline>
             <b-form-select class="topSelect" 
                 :options="ruleOptions" 
@@ -98,16 +99,21 @@
 
 <script>
 import CurveCanvas from "./curveCanvas"
+import Index from "./index"
 
 export default {
     name: "AddNormalRule",
     components:{
-        CurveCanvas
+        CurveCanvas,
+        Index
     },
     computed: {
         startValuesCheck(){
             //returns false if they are equal
-            return this.rule.start != this.rule.end
+            if(this.rule.ruleType == "range")
+                return this.rule.start != this.rule.end
+            else    
+                return true
         },
         startCheck(){
             //returns false if empty
@@ -126,18 +132,19 @@ export default {
         }
     },
     props: {
-        propKey: Number
+        existingRule: Object,
+        ruleIndex: Number
     },
     data(){
         return{
             rule: {
-                key: this.propKey,
-                ruleType: "range",
-                start: "0",
-                end: "0",
-                function: "linear",
-                n_start: "0",
-                n_end: "0"
+                key: null,
+                ruleType: null,
+                start: null,
+                end: null,
+                function: null,
+                n_start: null,
+                n_end: null
             },
             ruleOptions: [
                 {value: "greaterThan", text: "Greater than"},
@@ -145,6 +152,9 @@ export default {
                 {value: "range", text: "Between 2 values"}
             ],
         }
+    },
+    created(){
+        Object.assign(this.rule, this.existingRule)
     },
     methods: {
         createRule(){
@@ -157,7 +167,7 @@ export default {
         },
 
         deleteRule(){
-            this.$emit("addNormalRule:delete",this.propKey)
+            this.$emit("addNormalRule:delete",this.existingRule.key)
         }
     }
 }
@@ -186,5 +196,9 @@ export default {
 
     .checkboxGroup{
         margin-top: 20px;
+    }
+
+    #action_buttons_form{
+        margin-top: 30px;
     }
 </style>

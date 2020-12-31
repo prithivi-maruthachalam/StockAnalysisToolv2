@@ -1,0 +1,58 @@
+<template>
+    <div>
+        <Index :ruleIndex="ruleIndex"/>
+        <b-button variant="success" @click="editRule" class="btn-edit">
+                Edit Rule
+        </b-button>
+        <div>
+            <font>Between</font>
+            <font class="number">{{existingRule.start}}</font>
+            <font>and</font>
+            <font class="number">{{existingRule.end}}</font>
+        </div>
+    </div>
+</template>
+
+<script>
+import Index from "./index"
+
+export default {
+    name: "EditNormalRule",
+    components:{
+        Index
+    },
+    props:{
+        existingRule: Object,
+        ruleIndex: Number
+    },
+    methods:{
+        editRule(){
+            this.$emit("editNormalRule:edit",this.existingRule.key)
+        }
+    }    
+}
+</script>
+
+<style lang="scss" scoped>
+    @import "../scss/variables.scss";
+    div{
+        display: flex;
+        align-items: center;
+    }
+
+    font{
+        font-size: 19px;
+        margin-right: 7px;
+    }
+
+    .number{
+        font-size: 20px;
+        color: $darkText;
+        font-weight: 600;
+    }
+
+    .btn-edit{
+        font-size: 19px;
+        margin-right: 40px;
+    }
+</style>

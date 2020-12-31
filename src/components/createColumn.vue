@@ -71,16 +71,26 @@
                 v-if="form.normalisation_rules.length" 
             >
                 <b-list-group>
-                    <b-list-group-item class="listItem" v-for="rule of form.normalisation_rules" :key="rule.key">
-                        <AddNormalRule
-                            :propKey="rule.key"
-                            @addNormalRule:create="createRule($event)"
-                            @addNormalRule:delete="deleteRule($event)"
-                        />
-                        <Badge 
-                            content="unsaved"
-                            v-if="!rules_validate"
-                        />
+                    <b-list-group-item class="listItem" v-for="(rule,index) of form.normalisation_rules" :key="rule.key">
+                        <span v-if="!rule.validation">
+                            <AddNormalRule
+                                :existingRule="rule"
+                                :ruleIndex="index + 1"
+                                @addNormalRule:create="createRule($event)"
+                                @addNormalRule:delete="deleteRule($event)"
+                            />
+                            <Badge 
+                                content="unsaved"
+                                v-if="!rule.validation"
+                            />
+                        </span>
+                        <span v-else>
+                            <EditNormalRule
+                                :existingRule="rule"
+                                :ruleIndex="index + 1"
+                                @editNormalRule:edit="editRule($event)"
+                            />
+                        </span>
                     </b-list-group-item>
                 </b-list-group>
             </b-form-group>
@@ -103,13 +113,15 @@
 
 <script>
 import AddNormalRule from "./addNormalRule"
+import EditNormalRule from "./editNormalRule"
 import Badge from "./badge"
 
 export default {
     name: "ColumnForm",
     components:{
         AddNormalRule,
-        Badge
+        Badge,
+        EditNormalRule
     },
     data(){
         return{
@@ -161,12 +173,12 @@ export default {
             
             this.form.normalisation_rules.push({
                 key: ++this.count,
-                ruleType: "",
+                ruleType: "range",
                 function: "linear",
                 start: "0",
                 end: "0",
-                n_start: 0,
-                n_end: 0,
+                n_start: "0",
+                n_end: "0",
                 validation: false
             })
         },
@@ -185,6 +197,11 @@ export default {
             Object.assign(this.form.normalisation_rules[index],event)
             this.form.normalisation_rules[index].validation = true
             console.log(this.form.normalisation_rules)
+        },
+
+        editRule(targetKey){
+            var index = this.form.normalisation_rules.findIndex((rule)=>rule.key == targetKey)
+            this.form.normalisation_rules[index].validation = false
         }
     }
 }
@@ -199,7 +216,7 @@ export default {
     }
 
     .listItem{
-        max-width: 850px;
+        max-width: 880px;
     }
 
     .warning{
