@@ -72,7 +72,11 @@
             >
                 <b-list-group>
                     <b-list-group-item class="listItem" v-for="rule of form.normalisation_rules" :key="rule.key">
-                        <AddNormalRule/>
+                        <AddNormalRule
+                            :propKey="rule.key"
+                            @addNormalRule:create="createRule($event)"
+                            @addNormalRule:delete="deleteRule($event)"
+                        />
                     </b-list-group-item>
                 </b-list-group>
             </b-form-group>
@@ -152,11 +156,17 @@ export default {
             })
         },
 
-        deleteRule(target){
-            var index = this.form.normalisation_rules.findIndex((rule)=>rule.key == target)
+        deleteRule(targetKey){
+            var index = this.form.normalisation_rules.findIndex((rule)=>rule.key == targetKey)
             this.form.normalisation_rules.splice(index,1)
             if(this.form.normalisation_rules.length == 0)
                 this.form.isNormalise = "isNotNormalise"
+        },
+
+        createRule(event){
+            var index = this.form.normalisation_rules.findIndex((rule)=>rule.key == event.key)
+            this.form.normalisation_rules[]
+
         }
     }
 }

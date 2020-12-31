@@ -76,9 +76,21 @@
         </b-form-group>
 
 
-        <b-form inline>
-            <b-button variant="info mr-3">Confirm</b-button>
-            <b-button variant="danger">Delete</b-button>
+        <b-form inline id="action_buttons_form">
+            <b-button 
+                variant="info"
+                class="mr-3" 
+                :disabled="!(startValuesCheck && startCheck && endCheck && n_startCheck && n_endCheck)"
+                @click="createRule"
+            >
+                Confirm
+            </b-button>
+            <b-button 
+                variant="danger"
+                @click="deleteRule"
+            >
+                Delete
+            </b-button>
         </b-form>
     </div>
 </template>
@@ -91,7 +103,8 @@ export default {
     name: "AddNormalRule",
     components:{
         CurveCanvas
-    },computed: {
+    },
+    computed: {
         startValuesCheck(){
             //returns false if they are equal
             return this.rule.start != this.rule.end
@@ -112,9 +125,13 @@ export default {
             return this.rule.n_end != ""
         }
     },
+    props: {
+        propKey: Number
+    },
     data(){
         return{
             rule: {
+                key: this.propKey,
                 ruleType: "range",
                 start: "0",
                 end: "0",
@@ -127,6 +144,20 @@ export default {
                 {value: "lessThan", text: "Less than"},
                 {value: "range", text: "Between 2 values"}
             ],
+        }
+    },
+    methods: {
+        createRule(){
+            if(this.rule.ruleType == "greaterThan")
+                this.rule.end = "INF"
+            else if(this.rule.ruleType == "lessThan")
+                this.rule.start = "-INF"
+
+            this.$emit("addNormalRule:create",this.rule)
+        },
+
+        deleteRule(){
+            this.$emit("addNormalRule:delete",this.propKey)
         }
     }
 }
