@@ -86,7 +86,8 @@
                         </span>
                         <span v-else>
                             <EditNormalRule
-                                :existingRule="rule"
+                                :existingRuleStart="rule.start"
+                                :existingRuleEnd="rule.end"
                                 :ruleIndex="index + 1"
                                 @editNormalRule:edit="editRule($event)"
                             />
@@ -183,25 +184,19 @@ export default {
             })
         },
 
-        deleteRule(targetKey){
-            var index = this.form.normalisation_rules.findIndex((rule)=>rule.key == targetKey)
-            this.form.normalisation_rules.splice(index,1)
+        deleteRule(targetIndex){
+            this.form.normalisation_rules.splice(targetIndex,1)
             if(this.form.normalisation_rules.length == 0)
                 this.form.isNormalise = "isNotNormalise"
-
-            console.log(this.form.normalisation_rules)
         },
 
         createRule(event){
-            var index = this.form.normalisation_rules.findIndex((rule)=>rule.key == event.key)
-            Object.assign(this.form.normalisation_rules[index],event)
-            this.form.normalisation_rules[index].validation = true
-            console.log(this.form.normalisation_rules)
+            Object.assign(this.form.normalisation_rules[event.index],event.rule)
+            this.form.normalisation_rules[event.index].validation = true
         },
 
-        editRule(targetKey){
-            var index = this.form.normalisation_rules.findIndex((rule)=>rule.key == targetKey)
-            this.form.normalisation_rules[index].validation = false
+        editRule(targetIndex){
+            this.form.normalisation_rules[targetIndex].validation = false
         }
     }
 }

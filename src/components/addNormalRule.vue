@@ -163,11 +163,12 @@ export default {
             else if(this.rule.ruleType == "lessThan")
                 this.rule.start = "-INF"
 
-            this.$emit("addNormalRule:create",this.rule)
+            console.log(this.rule)
+            this.$emit("addNormalRule:create",{rule:this.rule, index:this.ruleIndex-1})
         },
 
         deleteRule(){
-            this.$emit("addNormalRule:delete",this.existingRule.key)
+            this.$emit("addNormalRule:delete",this.ruleIndex-1)
         }
     }
 }

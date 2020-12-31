@@ -6,9 +6,9 @@
         </b-button>
         <div>
             <font>Between</font>
-            <font class="number">{{existingRule.start}}</font>
+            <font class="number">{{existingRuleStart}}</font>
             <font>and</font>
-            <font class="number">{{existingRule.end}}</font>
+            <font class="number">{{existingRuleEnd}}</font>
         </div>
     </div>
 </template>
@@ -22,12 +22,13 @@ export default {
         Index
     },
     props:{
-        existingRule: Object,
+        existingRuleStart: String,
+        existingRuleEnd: String,
         ruleIndex: Number
     },
     methods:{
         editRule(){
-            this.$emit("editNormalRule:edit",this.existingRule.key)
+            this.$emit("editNormalRule:edit",(this.ruleIndex - 1))
         }
     }    
 }
