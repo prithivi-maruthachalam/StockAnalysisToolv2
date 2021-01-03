@@ -4,6 +4,9 @@
         <b-button variant="success" @click="editRule" class="btn-edit">
                 Edit Rule
         </b-button>
+        <b-button variant="danger" @click="deleteRule">
+                Delete
+        </b-button>
         <div>
             <font>Between</font>
             <font class="number">{{existingRuleStart}}</font>
@@ -29,6 +32,9 @@ export default {
     methods:{
         editRule(){
             this.$emit("editNormalRule:edit",(this.ruleIndex - 1))
+        },
+        deleteRule(){
+            this.$emit("editNormalRule:delete",this.ruleIndex - 1)
         }
     }    
 }
