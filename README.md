@@ -4,12 +4,10 @@
     
       
 ## Bugs
-- Validation error in ruleCreation for greater than and less
+
 ## TODO
-- Add delete button to edit list item
 - Add n_start & n_end to custom bezier curve
 - System to emit bezier curve information to createColumn on create rule
 - Columns in Database
 - Add columns list display on side 
 - (TBC)
-

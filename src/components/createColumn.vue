@@ -189,20 +189,21 @@ export default {
             this.form.normalisation_rules.splice(targetIndex,1)
             if(this.form.normalisation_rules.length == 0)
                 this.form.isNormalise = "isNotNormalise"
-
-            console.log(this.form.normalisation_rules)
+            // Debug
+            console.table(this.form.normalisation_rules)
         },
 
         createRule(event){
             Object.assign(this.form.normalisation_rules[event.index],event.rule)
             this.form.normalisation_rules[event.index].validation = true
-        
-            console.log(this.form.normalisation_rules)
+            // Debug
+            console.table(this.form.normalisation_rules)
         },
 
         editRule(targetIndex){
             this.form.normalisation_rules[targetIndex].validation = false
-            console.log(this.form.normalisation_rules)
+            // Debug
+            console.table(this.form.normalisation_rules)
         }
     }
 }

@@ -117,18 +117,20 @@ export default {
         },
         startCheck(){
             //returns false if empty
-            return this.rule.start != ""
+            return (this.rule.ruleType == "lessThan" || this.rule.start != "")
         },
         endCheck(){
             //returns false if empty
-            return this.rule.end != ""
+            return (this.rule.ruleType == "greaterThan" || this.rule.end != "")
         },
         n_startCheck(){
             //returns false if empty
-            return this.rule.n_start != ""
+            console.log("start",this.rule.n_start != "","end",this.rule.n_end != "")
+            return (this.rule.ruleType == 'lessThan' || this.rule.n_start != "")
         },
         n_endCheck(){
-            return this.rule.n_end != ""
+            console.log("start",this.rule.n_start != "","end",this.rule.n_end != "")
+            return (this.rule.ruleType == 'greaterThan' || this.rule.n_end != "")
         }
     },
     props: {
@@ -158,10 +160,14 @@ export default {
     },
     methods: {
         createRule(){
-            if(this.rule.ruleType == "greaterThan")
+            if(this.rule.ruleType == "greaterThan"){
                 this.rule.end = "INF"
-            else if(this.rule.ruleType == "lessThan")
+                this.rule.n_end = this.rule.n_start
+            }
+            else if(this.rule.ruleType == "lessThan"){
                 this.rule.start = "-INF"
+                this.rule.n_start = this.rule.n_end
+            }
 
             this.$emit("addNormalRule:create",{rule:this.rule, index:this.ruleIndex-1})
         },

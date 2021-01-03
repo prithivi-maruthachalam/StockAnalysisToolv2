@@ -1,13 +1,13 @@
 <template>
     <div>
         <Index :ruleIndex="ruleIndex"/>
-        <b-button variant="success" @click="editRule" class="btn-edit">
+        <b-button variant="success" @click="editRule" class="btn">
                 Edit Rule
         </b-button>
-        <b-button variant="danger" @click="deleteRule">
+        <b-button variant="danger" @click="deleteRule" class="btn">
                 Delete
         </b-button>
-        <div>
+        <div class="ml-3">
             <font>Between</font>
             <font class="number">{{existingRuleStart}}</font>
             <font>and</font>
@@ -58,8 +58,8 @@ export default {
         font-weight: 600;
     }
 
-    .btn-edit{
+    .btn{
         font-size: 19px;
-        margin-right: 40px;
+        margin-right: 20px;
     }
 </style>
