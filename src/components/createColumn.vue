@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container-fluid">
         <b-form @submit="onSubmit">
             <b-form-group id="col_name_group" 
                 label="Enter name of column"
@@ -115,7 +115,7 @@
 
 <script>
 import AddNormalRule from "./addNormalRule"
-import EditNormalRule from "./editNormalRule"
+import EditNormalRule from "./editNormalRule"  
 import Badge from "./badge"
 
 export default {
@@ -190,20 +190,20 @@ export default {
             if(this.form.normalisation_rules.length == 0)
                 this.form.isNormalise = "isNotNormalise"
             // Debug
-            console.table(this.form.normalisation_rules)
+            console.log(this.form.normalisation_rules)
         },
 
         createRule(event){
             Object.assign(this.form.normalisation_rules[event.index],event.rule)
             this.form.normalisation_rules[event.index].validation = true
             // Debug
-            console.table(this.form.normalisation_rules)
+            console.log(this.form.normalisation_rules)
         },
 
         editRule(targetIndex){
             this.form.normalisation_rules[targetIndex].validation = false
             // Debug
-            console.table(this.form.normalisation_rules)
+            console.log(this.form.normalisation_rules)
         }
     }
 }
@@ -211,15 +211,6 @@ export default {
 
 <style lang="scss" scoped>
     @import "../scss/variables.scss";
-
-    input,select{
-        max-width: 400px;
-        margin-right: 10px;
-    }
-
-    .listItem{
-        max-width: 880px;
-    }
 
     .warning{
         color: $warning!important;

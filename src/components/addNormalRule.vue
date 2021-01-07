@@ -73,6 +73,7 @@
                 v-bind:real_vals="[rule.start,rule.end,rule.n_start,rule.n_end]"
                 v-bind:graphSize="350"
                 v-bind:ruleType="rule.ruleType"
+                ref="curveCanvasRef"
             ></CurveCanvas>
         </b-form-group>
 
@@ -164,7 +165,7 @@ export default {
                 this.rule.start = "-INF"
                 this.rule.n_start = this.rule.n_end
             }
-
+            this.rule.curveParams = this.$refs.curveCanvasRef.updateCurveVals()
             this.$emit("addNormalRule:create",{rule:this.rule, index:this.ruleIndex-1})
         },
 

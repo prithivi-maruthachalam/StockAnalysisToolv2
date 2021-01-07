@@ -50,12 +50,12 @@ export default {
         // Draw the Bezier Curve
         this.context.beginPath()
         this.context.moveTo(...this.constants.start)
-        this.context.quadraticCurveTo(250,250,...this.constants.end)
+        this.context.quadraticCurveTo(...this.coords,...this.constants.end)
         this.context.stroke()
 
         // Draw the outer circle for the control point
         this.context.beginPath()
-        this.context.arc(250,250,this.constants.radius,0,Math.PI * 2)
+        this.context.arc(...this.coords,this.constants.radius,0,Math.PI * 2)
         this.context.stroke()
         // Draw the inner circle for the control point
         this.context.beginPath()
@@ -74,22 +74,27 @@ export default {
         // Draw x-axis end value
         this.context.fillText(
             this.real_vals[1],
-            this.constants.end[0] - (7.5 * this.real_vals[1].length),
+            this.constants.end[0] - (8 * this.real_vals[1].length),
             this.constants.start[1] + 30
         )
         // Draw y-axis start value
         this.context.fillText(
             this.real_vals[2],
-            this.constants.start[0] - (15 + (7.5 * this.real_vals[2].length)),
+            this.constants.start[0] - (12 + (8 * this.real_vals[2].length)),
             this.constants.start[1]
         )
         // Draw y-axis end value
         this.context.fillText(
             this.real_vals[3],
-            this.constants.start[0] - (15 + (7.5 * this.real_vals[2].length)),
-            this.constants.end[1] + 5
+            this.constants.start[0] - (12 + (8 * this.real_vals[3].length)),
+            this.constants.end[1] + 8
         )
         this.context.fill()
+
+        // Update curve params 
+        this.curveParams.start = this.constants.start
+        this.curveParams.control = this.coords
+        this.curveParams.end = this.constants.end
     },
     updated(){
         /* Handles redrawing x-axis & y-axis values */
@@ -101,11 +106,6 @@ export default {
         } else if(this.ruleType == "lessThan"){
             this.realValues = ["-INF",this.real_vals[1]]
         }
-
-        // if(this.real_vals[2].length > 4 || 
-        //     this.real_vals[3].length > 4){
-        //         this.canvasref.width += 100
-        // }
 
         //Clears the strips where the numbers are drawn
         this.context.clearRect(
@@ -121,18 +121,18 @@ export default {
             this.canvasref.height
         )
 
-        // Draw x-axis start value
+        // Draw x-axis start value : need not move according to size
         this.context.beginPath()
         this.context.font = "15px Arial"
         this.context.fillStyle = "#435a6b";
         this.context.fillText(
-            this.realValues[0],
-            this.constants.start[0] - 5,
+            this.real_vals[0],
+            this.constants.start[0],
             this.constants.start[1] + 30
         )
         // Draw x-axis end value
         this.context.fillText(
-            this.realValues[1],
+            this.real_vals[1],
             this.constants.end[0] - (8 * this.real_vals[1].length),
             this.constants.start[1] + 30
         )
@@ -140,13 +140,13 @@ export default {
         this.context.fillText(
             this.real_vals[2],
             this.constants.start[0] - (12 + (8 * this.real_vals[2].length)),
-            this.constants.start[1] + 5
+            this.constants.start[1]
         )
         // Draw y-axis end value
         this.context.fillText(
             this.real_vals[3],
             this.constants.start[0] - (12 + (8 * this.real_vals[3].length)),
-            this.constants.end[1] + 5
+            this.constants.end[1] + 8
         )
         this.context.fill()
     },
@@ -154,7 +154,7 @@ export default {
         return{
             context: null,
             canvasref: null,
-            coords: [250,250],
+            coords: [300,300],
             constants: {
                 start: [0,0],
                 end: [0, 0],
@@ -162,7 +162,12 @@ export default {
                 sizeOfGraph: this.graphSize
             },
             isDragging: false,
-            realValues: this.real_vals
+            realValues: this.real_vals,
+            curveParams: {
+                "start":[null,null],
+                "control":[null,null],
+                "end":[null,null]
+            }
         }
     },
     props: {
@@ -218,6 +223,13 @@ export default {
             this.context.beginPath()
             this.context.arc(...this.coords,3,0,Math.PI * 2)
             this.context.fill()
+        },
+        updateCurveVals(){
+            this.curveParams.start = this.constants.start
+            this.curveParams.control = this.coords
+            this.curveParams.end = this.constants.end
+
+            return this.curveParams
         }
     }    
 }
