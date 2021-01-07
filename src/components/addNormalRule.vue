@@ -70,7 +70,7 @@
             label="Drag the point to set the shape of your custom curve"
         >
             <CurveCanvas
-                v-bind:real_vals="[rule.start,rule.end]"
+                v-bind:real_vals="[rule.start,rule.end,rule.n_start,rule.n_end]"
                 v-bind:graphSize="350"
                 v-bind:ruleType="rule.ruleType"
             ></CurveCanvas>
@@ -110,10 +110,8 @@ export default {
     computed: {
         startValuesCheck(){
             //returns false if they are equal
-            if(this.rule.ruleType == "range")
-                return this.rule.start != this.rule.end
-            else    
-                return true
+            if(this.rule.ruleType == "range")   return this.rule.start != this.rule.end
+            else    return true
         },
         startCheck(){
             //returns false if empty
@@ -125,11 +123,9 @@ export default {
         },
         n_startCheck(){
             //returns false if empty
-            console.log("start",this.rule.n_start != "","end",this.rule.n_end != "")
             return (this.rule.ruleType == 'lessThan' || this.rule.n_start != "")
         },
         n_endCheck(){
-            console.log("start",this.rule.n_start != "","end",this.rule.n_end != "")
             return (this.rule.ruleType == 'greaterThan' || this.rule.n_end != "")
         }
     },
