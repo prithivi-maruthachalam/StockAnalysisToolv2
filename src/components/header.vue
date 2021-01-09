@@ -3,7 +3,12 @@
         <div class="row">
             <div class="col-md-4"><font>{{usernickname}}'s Pool</font></div>
             <div class="col-md-8 button-group">
-                <b-button variant="info" size="lg">
+                <router-link to="/create_columns">
+                    <b-button variant="dark" size="lg">
+                        Add Columns
+                    </b-button>
+                </router-link>
+                <b-button variant="info" size="lg" class="ml-3">
                     Add to Pool
                 </b-button>
                 <b-button variant="success" size="lg" class="ml-3">

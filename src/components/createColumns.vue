@@ -8,24 +8,33 @@
                 </div>
             </div>
             <div class="col-md">
-                tetjfdhhg
+                <ColumnList
+                    :columns="columns"
+                />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import ColumnForm from "./createColumn"
+import ColumnForm from "./columnForm"
+import ColumnList from "./columnList"
 
 export default {
     name: "CreatePool",
     data(){
         return{
-            columns: []
         }
     },
+    props:{
+        columns: Array
+    },
     components:{
-        ColumnForm
+        ColumnForm,
+        ColumnList
+    },
+    mounted(){
+        console.log(this.columns)
     }
 }
 </script>

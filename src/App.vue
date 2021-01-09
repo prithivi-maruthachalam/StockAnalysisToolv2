@@ -6,6 +6,8 @@
       v-bind:is_Loading="is_Loading"
       v-bind:is_LoadError="is_LoadError"
       v-bind:is_NoData="is_NoData"
+      :isColumnsEmpty="isColumnsEmpty"
+      :columns="columnsList"
     />
   </div>
 </template>
@@ -25,9 +27,10 @@ export default {
     return{
       usernickname: usernickname,
       is_Loading: true,
-      poolData: {},
       is_LoadError: false,
-      is_NoData: false 
+      is_NoData: false,
+      isColumnsEmpty: true,
+      columnsList: [] 
   }},
   //lifecycle hooks
   created() {
@@ -35,18 +38,25 @@ export default {
     this.is_Loading = true
     this.is_LoadError = false
     this.is_NoData = false
+    this.isColumnsEmpty = true
   },
   mounted(){
-    ipcRenderer.on("main:pool-data-return", (event,data) => {
-      if(!data){
+    ipcRenderer.on("main:columns-return", (event,columns) => {
+      // Handing data from columns
+      console.log(columns)
+      if(!columns){
+        // Show that there is an error
         this.is_Loading = false
         this.is_LoadError = true
-      } else if(data.dataLength == 0){
+      } else if(columns.columnsLength == 0){
+        // There are no columns so go to create column page
         this.is_Loading = false
         this.is_NoData = true
       } else {
+        // There are columns - add more columns or show pool
         this.is_Loading = false
-        this.poolData = data
+        this.isColumnsEmpty = false
+        this.columnsList = columns
       }
     })
   }
