@@ -1,6 +1,6 @@
 <template v-if="is_enable">
     <div id="noDataContainer">
-        <div v-if="!is_NoData" class="container-fluid content-center text-center">
+        <div v-if="is_NoData" class="container-fluid content-center text-center">
             <div>
                 <div>
                     You don't have any records yet. Click to start adding
@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>  
-        <div v-else-if="isColumnsEmpty" class="container-fluid content-center text-center">
+        <div v-else-if="!isColumnsEmpty" class="container-fluid content-center text-center">
                 <div class="mx-2">
                     <router-link to="/create_columns">
                         <b-button variant="dark" size="lg">

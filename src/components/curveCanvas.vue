@@ -35,7 +35,8 @@ export default {
         y = y - this.graphSize
         this.constants.end = [Math.round(x),Math.round(y)]
 
-        console.log(this.constants.start, this.constants.end)
+        // Debug
+        // console.log(this.constants.start, this.constants.end)
 
         // Draw bounding rectangle for curve
         this.context.beginPath();

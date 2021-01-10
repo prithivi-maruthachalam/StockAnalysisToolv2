@@ -1,7 +1,7 @@
 <template>
     <div class="componentContainer container-fluid">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <font v-if="columns.length == 0" class="text-padding">Start by creating columns</font>
                 <div id="formContainer">
                     <ColumnForm />

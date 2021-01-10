@@ -2,6 +2,7 @@
     <div class="container-fluid">
         <b-form @submit="onSubmit">
             <b-form-group id="col_name_group" 
+                class="partWidth"
                 label="Enter name of column"
             >
                 <b-form-input
@@ -18,6 +19,7 @@
 
             <b-form-group id="col_type_group" 
                 label="Choose a type"
+                class="partWidth"
             >
                 <b-form-select 
                     id="col_type"
@@ -32,6 +34,7 @@
 
             <b-form-group id="col_is_core_group" 
                 label="Should this be a core coloumn?"
+                class="partWidth"
                 v-if="form.type != 'string'"
             >
                 <b-form-checkbox
@@ -45,6 +48,7 @@
             <b-form-group id="col_weight_group" 
                 label="Enter weight for this coloumn"
                 v-if="form.isCore == 'isCore'"
+                class="partWidth"
             >
                 <b-form-input
                     id="col_weight"
@@ -194,6 +198,8 @@ export default {
         },
 
         createRule(event){
+            if(this.form.normalisation_rules[event.index].ruleType != "custom")
+                delete this.form.normalisation_rules[event.index].curveParams
             Object.assign(this.form.normalisation_rules[event.index],event.rule)
             this.form.normalisation_rules[event.index].validation = true
             // Debug
@@ -214,6 +220,10 @@ export default {
 
     .warning{
         color: $warning!important;
+    }
+
+    .partWidth{
+        max-width: 600px;
     }
 
 </style>

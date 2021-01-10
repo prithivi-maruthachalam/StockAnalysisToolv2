@@ -165,7 +165,16 @@ export default {
                 this.rule.start = "-INF"
                 this.rule.n_start = this.rule.n_end
             }
-            this.rule.curveParams = this.$refs.curveCanvasRef.updateCurveVals()
+
+            if(this.rule.function == "custom")
+                this.rule.curveParams = this.$refs.curveCanvasRef.updateCurveVals()
+            else{
+                // Delete the entire curveParams field
+                delete this.rule.curveParams
+                console.log("AddNormalRule")
+                console.log(this.rule)
+            }
+
             this.$emit("addNormalRule:create",{rule:this.rule, index:this.ruleIndex-1})
         },
 
