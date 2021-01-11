@@ -121,6 +121,7 @@
 import AddNormalRule from "./addNormalRule"
 import EditNormalRule from "./editNormalRule"  
 import Badge from "./badge"
+const { ipcRenderer } = window.require("electron")
 
 export default {
     name: "ColumnForm",
@@ -170,7 +171,10 @@ export default {
     methods:{
         onSubmit(event){
             event.preventDefault()
-            alert(JSON.stringify(this.form))
+            // Emit IPC event with form as data
+            // TODO: Need way to stop column from added more than once
+            ipcRenderer.send("columnForm:submit", this.form)
+            //alert(JSON.stringify(this.form))
         },
 
         addNormal(){
@@ -194,7 +198,7 @@ export default {
             if(this.form.normalisation_rules.length == 0)
                 this.form.isNormalise = "isNotNormalise"
             // Debug
-            console.log(this.form.normalisation_rules)
+            // console.log(this.form.normalisation_rules)
         },
 
         createRule(event){
@@ -203,13 +207,13 @@ export default {
             Object.assign(this.form.normalisation_rules[event.index],event.rule)
             this.form.normalisation_rules[event.index].validation = true
             // Debug
-            console.log(this.form.normalisation_rules)
+            // console.log(this.form.normalisation_rules)
         },
 
         editRule(targetIndex){
             this.form.normalisation_rules[targetIndex].validation = false
             // Debug
-            console.log(this.form.normalisation_rules)
+            // console.log(this.form.normalisation_rules)
         }
     }
 }
