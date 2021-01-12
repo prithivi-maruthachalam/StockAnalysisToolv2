@@ -52,7 +52,8 @@ app.on("activate",()=>{
 /* Event handlers */
 
 // Start event handler
-ipcMain.on("render:started",(event) => {
+ipcMain.on("render:started", (event) => {
+    console.clear()
     console.log("[MAIN] : Recieved start message from render process")
     columns.find({}, (error, columns) => { 
         if (error) {
@@ -68,4 +69,16 @@ ipcMain.on("render:started",(event) => {
 // Column form submit event handler
 ipcMain.on("columnForm:submit", (event, form) => { 
     console.log("[MAIN] : Received submit event from column form with data \n\t" + JSON.stringify(form))
+    if (form) {
+        // We're all good
+        // TODO: Calculate values from data
+        // TODO: Put column in database
+        // TODO: Update ColumnsList in render process
+        // TODO: Send success signal to render process
+        event.sender.send("main:submitReceived",true)
+    } else {
+        // Error in the form data
+        console.error("[MAIN] : Problem with submitted form \n\t" + JSON.stringify(form))
+        event.sender.send("main:submitReceived",false)
+    }
 })

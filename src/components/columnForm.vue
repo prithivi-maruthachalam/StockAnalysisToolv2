@@ -214,7 +214,28 @@ export default {
             this.form.normalisation_rules[targetIndex].validation = false
             // Debug
             // console.log(this.form.normalisation_rules)
+        },
+        resetForm(){
+            this.form = {
+                name: "",
+                type: "",
+                isCore: "isNotCore",
+                isNormalise: "isNotNormalise",
+                weight: 1,
+                normalisation_rules: []
+            }
         }
+    },
+    mounted(){
+        ipcRenderer.on("main:submitReceived", (event,isSubmitted) => {
+            if(isSubmitted){
+                console.log("Submit successfull")
+                this.resetForm()
+
+            } else {
+                console.error("There were errors submitting")
+            }
+        })
     }
 }
 </script>
