@@ -35,9 +35,6 @@ export default {
         y = y - this.graphSize
         this.constants.end = [Math.round(x),Math.round(y)]
 
-        // Debug
-        // console.log(this.constants.start, this.constants.end)
-
         // Draw bounding rectangle for curve
         this.context.beginPath();
         this.context.rect(
@@ -93,9 +90,9 @@ export default {
         this.context.fill()
 
         // Update curve params 
-        this.curveParams.start = this.constants.start
-        this.curveParams.control = this.coords
-        this.curveParams.end = this.constants.end
+        this.curveParams.start = [this.constants.start[0],this.constants.end[1]]
+        this.curveParams.control = [this.coords[0], this.canvasref.height - this.coords[1]]
+        this.curveParams.end = [this.constants.end[0],this.constants.start[1]]
     },
     updated(){
         /* Handles redrawing x-axis & y-axis values */
@@ -155,7 +152,7 @@ export default {
         return{
             context: null,
             canvasref: null,
-            coords: [300,300],
+            coords: [320,320],
             constants: {
                 start: [0,0],
                 end: [0, 0],
@@ -165,9 +162,9 @@ export default {
             isDragging: false,
             realValues: this.real_vals,
             curveParams: {
-                "start":[null,null],
-                "control":[null,null],
-                "end":[null,null]
+                start : [null,null],
+                control : [null,null],
+                end : [null,null]
             }
         }
     },
@@ -226,9 +223,10 @@ export default {
             this.context.fill()
         },
         updateCurveVals(){
-            this.curveParams.start = this.constants.start
-            this.curveParams.control = this.coords
-            this.curveParams.end = this.constants.end
+            // Update curve params 
+            this.curveParams.start = [this.constants.start[0],this.canvasref.height - this.constants.start[1]]
+            this.curveParams.control = [this.coords[0], this.canvasref.height - this.coords[1]]
+            this.curveParams.end = [this.constants.end[0],this.canvasref.height - this.constants.end[1]]
 
             return this.curveParams
         }

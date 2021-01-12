@@ -230,7 +230,7 @@ export default {
         ipcRenderer.on("main:submitReceived", (event,isSubmitted) => {
             if(isSubmitted){
                 console.log("Submit successfull")
-                this.resetForm()
+                //this.resetForm()
 
             } else {
                 console.error("There were errors submitting")

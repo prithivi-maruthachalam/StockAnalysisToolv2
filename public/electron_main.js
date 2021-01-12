@@ -2,6 +2,8 @@ const path = require('path');
 const electron = require('electron');
 const isDev = require('electron-is-dev');
 const Datastore = require('nedb');
+const { log } = require('console');
+const { type } = require('os');
 
 const {app, BrowserWindow, ipcMain} = electron;
 
@@ -71,7 +73,23 @@ ipcMain.on("columnForm:submit", (event, form) => {
     console.log("[MAIN] : Received submit event from column form with data \n\t" + JSON.stringify(form))
     if (form) {
         // We're all good
-        // TODO: Calculate values from data
+        console.debug(form)
+        form.normalisation_rules.forEach(rule => {
+            var newControl = {x:null,y:null}
+            var x_frac =  (rule.end - rule.start) / (rule.curveParams.end[0] - rule.curveParams.start[0])
+            newControl.x = parseFloat((rule.curveParams.control[0] - rule.curveParams.start[0]) * x_frac) + parseFloat(rule.start)
+
+            var y_frac =  (rule.n_end - rule.n_start) / (rule.curveParams.start[1] - rule.curveParams.end[1])
+            newControl.y = parseFloat(rule.n_end) - parseFloat((rule.curveParams.start[1] - rule.curveParams.control[1]) * y_frac)
+            console.log(newControl)            
+
+
+            // Have to create a new variable for form
+            // This new variable contains a large number of x,y pairs
+            // the number of such values is based on the range of the input and output values
+
+            // Optimisation? Calculate for small ranges and save whenever a record is entered
+        });
         // TODO: Put column in database
         // TODO: Update ColumnsList in render process
         // TODO: Send success signal to render process

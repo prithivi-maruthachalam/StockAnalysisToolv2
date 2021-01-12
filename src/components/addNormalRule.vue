@@ -171,8 +171,6 @@ export default {
             else{
                 // Delete the entire curveParams field
                 delete this.rule.curveParams
-                console.log("AddNormalRule")
-                console.log(this.rule)
             }
 
             this.$emit("addNormalRule:create",{rule:this.rule, index:this.ruleIndex-1})
