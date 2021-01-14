@@ -139,11 +139,11 @@ export default {
             rule: {
                 key: null,
                 ruleType: null,
-                start: null,
+                start: null, 
                 end: null,
-                function: null,
-                n_start: null,
-                n_end: null
+                function: "linear",
+                n_start: 10,
+                n_end: 100
             },
             ruleOptions: [
                 {value: "greaterThan", text: "Greater than"},

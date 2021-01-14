@@ -75,15 +75,30 @@ ipcMain.on("columnForm:submit", (event, form) => {
         // We're all good
         console.debug(form)
         form.normalisation_rules.forEach(rule => {
-            var newControl = {x:null,y:null}
+            rule.start = parseFloat(rule.start)
+            rule.end = parseFloat(rule.end)
+            rule.n_start = parseFloat(rule.n_start)
+            rule.n_end = parseFloat(rule.n_end)
+
+            var newControl = { x: null, y: null }
+            
             var x_frac =  (rule.end - rule.start) / (rule.curveParams.end[0] - rule.curveParams.start[0])
-            newControl.x = parseFloat((rule.curveParams.control[0] - rule.curveParams.start[0]) * x_frac) + parseFloat(rule.start)
+            newControl.x = ((rule.curveParams.control[0] - rule.curveParams.start[0]) * x_frac) + rule.start
 
-            var y_frac =  (rule.n_end - rule.n_start) / (rule.curveParams.start[1] - rule.curveParams.end[1])
-            newControl.y = parseFloat(rule.n_end) - parseFloat((rule.curveParams.start[1] - rule.curveParams.control[1]) * y_frac)
-            console.log(newControl)            
+            var y_frac =  (rule.n_end - rule.n_start) / (rule.curveParams.end[1] - rule.curveParams.start[1])
+            newControl.y = ((rule.curveParams.control[1] - rule.curveParams.start[1]) * y_frac) + rule.n_start
+            console.log("Normalised Control Points : ",newControl)
 
-
+            
+            var xyMap = []
+            resolution = (Math.abs(rule.end - rule.start) >= Math.abs(rule.n_end - rule.n_start)) ? Math.abs(rule.end - rule.start) * 1000 : Math.abs(rule.n_end - rule.n_start) * 1000
+            var i = 0
+            console.log("Resolution : ", resolution)
+            for (; i <= 1; i += (1 / resolution)) {
+                xyMap.push(getBezierCoords(i, rule.start, rule.n_start, rule.end, rule.n_end, newControl))
+            }
+            xyMap.push(getBezierCoords(1, rule.start, rule.n_start, rule.end, rule.n_end, newControl))
+            
             // Have to create a new variable for form
             // This new variable contains a large number of x,y pairs
             // the number of such values is based on the range of the input and output values
@@ -100,3 +115,13 @@ ipcMain.on("columnForm:submit", (event, form) => {
         event.sender.send("main:submitReceived",false)
     }
 })
+
+
+// Util functions
+function getBezierCoords(t, Ax, Ay, Bx, By, controlPoint) { 
+    // console.log(t, Ax, Ay, Bx, By, controlPoint)
+    return {
+        x: ((1-t) * (1-t) * Ax) + (2 * (1-t) * t * controlPoint.x) + (t * t * Bx),
+        y: ((1-t) * (1-t) * Ay) + (2 * (1-t) * t * controlPoint.y) + (t * t * By)
+    }
+} 
