@@ -172,9 +172,7 @@ export default {
         onSubmit(event){
             event.preventDefault()
             // Emit IPC event with form as data
-            // TODO: Need way to stop column from added more than once
             ipcRenderer.send("columnForm:submit", this.form)
-            //alert(JSON.stringify(this.form))
         },
 
         addNormal(){
@@ -197,8 +195,6 @@ export default {
             this.form.normalisation_rules.splice(targetIndex,1)
             if(this.form.normalisation_rules.length == 0)
                 this.form.isNormalise = "isNotNormalise"
-            // Debug
-            // console.log(this.form.normalisation_rules)
         },
 
         createRule(event){
@@ -212,8 +208,6 @@ export default {
 
         editRule(targetIndex){
             this.form.normalisation_rules[targetIndex].validation = false
-            // Debug
-            // console.log(this.form.normalisation_rules)
         },
         resetForm(){
             this.form = {
@@ -230,7 +224,9 @@ export default {
         ipcRenderer.on("main:submitReceived", (event,isSubmitted) => {
             if(isSubmitted){
                 console.log("Submit successfull")
-                // this.resetForm()
+                // since submit is successfull, call the event to get list of columns
+                ipcRenderer.send("render:started")
+                this.resetForm()
 
             } else {
                 console.error("There were errors submitting")

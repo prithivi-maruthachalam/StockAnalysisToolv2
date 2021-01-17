@@ -9,7 +9,7 @@
             </div>
             <div class="col-md">
                 <ColumnList
-                    :columns="columns"
+                    :columnsList="columns"
                 />
             </div>
         </div>
@@ -27,14 +27,11 @@ export default {
         }
     },
     props:{
-        columns: Array
+        columns: Object
     },
     components:{
         ColumnForm,
         ColumnList
-    },
-    mounted(){
-        console.log(this.columns)
     }
 }
 </script>

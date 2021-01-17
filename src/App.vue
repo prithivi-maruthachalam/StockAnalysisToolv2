@@ -34,7 +34,7 @@ export default {
   }},
   //lifecycle hooks
   created() {
-    ipcRenderer.send("render:started")
+    ipcRenderer.send("render:started") // Also used as an alias to get columns
     this.is_Loading = true
     this.is_LoadError = false
     this.is_NoData = false
@@ -59,7 +59,7 @@ export default {
         this.columnsList = columns
       }
     })
-  }
+  },
 };
 
 </script>
