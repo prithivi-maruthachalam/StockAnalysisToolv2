@@ -90,8 +90,7 @@
                         </span>
                         <span v-else>
                             <EditNormalRule
-                                :existingRuleStart="rule.start"
-                                :existingRuleEnd="rule.end"
+                                :existingRule="{start: rule.start, end: rule.end}"
                                 :ruleIndex="index + 1"
                                 @editNormalRule:edit="editRule($event)"
                                 @editNormalRule:delete="deleteRule($event)"
@@ -183,10 +182,10 @@ export default {
                 key: ++this.count,
                 ruleType: "range",
                 function: "linear",
-                start: "",
-                end: "",
-                n_start: "",
-                n_end: "",
+                start: null,
+                end: null,
+                n_start: null,
+                n_end: null,
                 validation: false
             })
         },
@@ -203,7 +202,7 @@ export default {
             Object.assign(this.form.normalisation_rules[event.index],event.rule)
             this.form.normalisation_rules[event.index].validation = true
             // Debug
-            // console.log(this.form.normalisation_rules)
+            console.log(this.form.normalisation_rules)
         },
 
         editRule(targetIndex){

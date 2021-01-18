@@ -1,14 +1,18 @@
 <template>
     <div class="container-fluid text-right columnItemContainer">
         <div class="name">{{column.name}}</div>
-        <div class="content" v-if="column.isCore == true">
+        <div class="content" v-if="!column.isCore && column.type == 'number'">
+            not a core component
+        </div>        
+        <div class="content" v-else-if="!column.isCore && column.type == 'string'">
+            word
+        </div>
+        <div class="content" v-else-if="column.isCore == true">
             <div>{{column.weight}}x weight</div>
             <div v-if="column.isNormalise == true">
-                {{column.normalisation_rules.length}} rules
+                {{column.normalisation_rules.length}} 
+                rule<span v-if="column.normalisation_rules.length > 1">s</span>
             </div>
-        </div>
-        <div class="content" v-else-if="!column.isCore">
-            not a core component
         </div>
     </div>    
 </template>

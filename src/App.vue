@@ -30,7 +30,7 @@ export default {
       is_LoadError: false,
       is_NoData: false,
       isColumnsEmpty: true,
-      columnsList: [] 
+      columnsList: {}
   }},
   //lifecycle hooks
   created() {

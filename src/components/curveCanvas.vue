@@ -17,6 +17,8 @@
 export default {
     name: "CurveCanvas",
     mounted(){
+        console.log(this.real_vals)
+
         // Get ref for the canvas element
         this.canvasref = this.$refs.canvasRef
         this.context = this.canvasref.getContext("2d")
@@ -65,26 +67,26 @@ export default {
         this.context.font = "15px Arial"
         this.context.fillStyle = "#435a6b";
         this.context.fillText(
-            this.real_vals[0],
+            this.real_vals[0].toString(),
             this.constants.start[0],
             this.constants.start[1] + 30
         )
         // Draw x-axis end value
         this.context.fillText(
-            this.real_vals[1],
-            this.constants.end[0] - (8 * this.real_vals[1].length),
+            this.real_vals[1].toString(),
+            this.constants.end[0] - (8 * this.real_vals[1].toString().length),
             this.constants.start[1] + 30
         )
         // Draw y-axis start value
         this.context.fillText(
-            this.real_vals[2],
-            this.constants.start[0] - (12 + (8 * this.real_vals[2].length)),
+            this.real_vals[2].toString(),
+            this.constants.start[0] - (12 + (8 * this.real_vals[2].toString().length)),
             this.constants.start[1]
         )
         // Draw y-axis end value
         this.context.fillText(
-            this.real_vals[3],
-            this.constants.start[0] - (12 + (8 * this.real_vals[3].length)),
+            this.real_vals[3].toString(),
+            this.constants.start[0] - (12 + (8 * this.real_vals[3].toString().length)),
             this.constants.end[1] + 8
         )
         this.context.fill()
@@ -124,26 +126,26 @@ export default {
         this.context.font = "15px Arial"
         this.context.fillStyle = "#435a6b";
         this.context.fillText(
-            this.real_vals[0],
+            this.real_vals[0].toString(),
             this.constants.start[0],
             this.constants.start[1] + 30
         )
         // Draw x-axis end value
         this.context.fillText(
-            this.real_vals[1],
-            this.constants.end[0] - (8 * this.real_vals[1].length),
+            this.real_vals[1].toString(),
+            this.constants.end[0] - (8 * this.real_vals[1].toString().length),
             this.constants.start[1] + 30
         )
         // Draw y-axis start value
         this.context.fillText(
-            this.real_vals[2],
-            this.constants.start[0] - (12 + (8 * this.real_vals[2].length)),
+            this.real_vals[2].toString(),
+            this.constants.start[0] - (12 + (8 * this.real_vals[2].toString().length)),
             this.constants.start[1]
         )
         // Draw y-axis end value
         this.context.fillText(
-            this.real_vals[3],
-            this.constants.start[0] - (12 + (8 * this.real_vals[3].length)),
+            this.real_vals[3].toString(),
+            this.constants.start[0] - (12 + (8 * this.real_vals[3].toString().length)),
             this.constants.end[1] + 8
         )
         this.context.fill()

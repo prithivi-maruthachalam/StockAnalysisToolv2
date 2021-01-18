@@ -13,7 +13,7 @@
                 >negative infinity</label>
                 <b-form-input class="normalNum d-inline"
                     v-if="rule.ruleType == 'range' || rule.ruleType == 'greaterThan'"
-                    v-model="rule.start"
+                    v-model.number="rule.start"
                     type="number"
                 />
 
@@ -24,7 +24,7 @@
                 >infinity</label>
                 <b-form-input class="normalNum d-inline"
                     v-if="rule.ruleType == 'range' || rule.ruleType == 'lessThan'"
-                    v-model="rule.end"
+                    v-model.number="rule.end"
                     type="number"
                 />
         </b-form>
@@ -42,20 +42,20 @@
         </b-form-group>
 
         <b-form-group id="end_values_group"
-            :label="(rule.ruleType == 'range') ? 'Enter the start and end values here' : 'Enter one value for this rule'"
+            label="Enter the start and end values here"
             v-if="rule.ruleType"
         >
             <b-form inline>
                 <label v-if="rule.ruleType == 'range'" class="inLabel">from</label>
                 <b-form-input class="normalNum d-inline"
-                    v-if="rule.ruleType == 'range' || rule.ruleType == 'greaterThan'"
-                    v-model="rule.n_start"
+                    v-if="rule.ruleType"
+                    v-model.number="rule.n_start"
                     type="number"
                 />
                 <label v-if="rule.ruleType == 'range'" class="inLabel">to</label>
                 <b-form-input class="normalNum d-inline"
-                    v-if="rule.ruleType == 'range' || rule.ruleType == 'lessThan'"
-                    v-model="rule.n_end"
+                    v-if="rule.ruleType"
+                    v-model.number="rule.n_end"
                     type="number"
                 />
             </b-form>
@@ -70,7 +70,7 @@
             label="Drag the point to set the shape of your custom curve"
         >
             <CurveCanvas
-                v-bind:real_vals="[rule.start,rule.end,rule.n_start,rule.n_end]"
+                v-bind:real_vals="[ruleStartValue,ruleEndValue,rule.n_start,rule.n_end]"
                 v-bind:graphSize="350"
                 v-bind:ruleType="rule.ruleType"
                 ref="curveCanvasRef"
@@ -109,6 +109,13 @@ export default {
         Index
     },
     computed: {
+        ruleStartValue(){
+            return (this.rule.ruleType == "lessThan") ? "-INF" : this.rule.start
+        },
+        ruleEndValue(){
+            return (this.rule.ruleType == "greaterThan") ? "-INF" : this.rule.end
+        },
+
         startValuesCheck(){
             //returns false if they are equal
             if(this.rule.ruleType == "range")   return this.rule.start != this.rule.end
@@ -116,18 +123,18 @@ export default {
         },
         startCheck(){
             //returns false if empty
-            return (this.rule.ruleType == "lessThan" || this.rule.start != "")
+            return (this.rule.ruleType == "lessThan" || this.rule.start != null)
         },
         endCheck(){
             //returns false if empty
-            return (this.rule.ruleType == "greaterThan" || this.rule.end != "")
+            return (this.rule.ruleType == "greaterThan" || this.rule.end != null)
         },
         n_startCheck(){
             //returns false if empty
-            return (this.rule.ruleType == 'lessThan' || this.rule.n_start != "")
+            return (this.rule.n_start != null)
         },
         n_endCheck(){
-            return (this.rule.ruleType == 'greaterThan' || this.rule.n_end != "")
+            return (this.rule.n_end != null)
         }
     },
     props: {
@@ -142,8 +149,8 @@ export default {
                 start: null, 
                 end: null,
                 function: "linear",
-                n_start: 10,
-                n_end: 100
+                n_start: null,
+                n_end: null
             },
             ruleOptions: [
                 {value: "greaterThan", text: "Greater than"},

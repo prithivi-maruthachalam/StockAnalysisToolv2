@@ -9,9 +9,9 @@
         </b-button>
         <div class="ml-3">
             <font>Between</font>
-            <font class="number">{{existingRuleStart}}</font>
+            <font class="number">{{existingRule.start.toString()}}</font>
             <font>and</font>
-            <font class="number">{{existingRuleEnd}}</font>
+            <font class="number">{{existingRule.end.toString()}}</font>
         </div>
     </div>
 </template>
@@ -25,8 +25,7 @@ export default {
         Index
     },
     props:{
-        existingRuleStart: String,
-        existingRuleEnd: String,
+        existingRule: Object,
         ruleIndex: Number
     },
     methods:{

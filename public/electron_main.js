@@ -4,6 +4,7 @@ const isDev = require('electron-is-dev');
 const Datastore = require('nedb');
 const { log } = require('console');
 const { type } = require('os');
+const { parse } = require('url');
 
 const {app, BrowserWindow, ipcMain} = electron;
 
@@ -71,23 +72,19 @@ ipcMain.on("render:started", (event) => {
 // Column form submit event handler
 ipcMain.on("columnForm:submit", (event, form) => { 
     console.log("[MAIN] : Received submit event from column form with data \t" + form.name)
+    console.debug(form)
     var xyMap = []
     if (form) {
         form.normalisation_rules.filter(rule => {
             return rule.function === "custom"
         }).forEach(rule => {
-            rule.start = parseFloat(rule.start)
-            rule.end = parseFloat(rule.end)
-            rule.n_start = parseFloat(rule.n_start)
-            rule.n_end = parseFloat(rule.n_end)
-
             var newControl = { x: null, y: null }
             
-            var x_frac =  (rule.end - rule.start) / (rule.curveParams.end[0] - rule.curveParams.start[0])
-            newControl.x = ((rule.curveParams.control[0] - rule.curveParams.start[0]) * x_frac) + rule.start
+            var x_frac =  parseFloat(rule.end - rule.start) / (rule.curveParams.end[0] - rule.curveParams.start[0])
+            newControl.x = parseFloat(((rule.curveParams.control[0] - rule.curveParams.start[0]) * x_frac) + rule.start)
 
-            var y_frac =  (rule.n_end - rule.n_start) / (rule.curveParams.end[1] - rule.curveParams.start[1])
-            newControl.y = ((rule.curveParams.control[1] - rule.curveParams.start[1]) * y_frac) + rule.n_start
+            var y_frac =  parseFloat(rule.n_end - rule.n_start) / (rule.curveParams.end[1] - rule.curveParams.start[1])
+            newControl.y = parseFloat(((rule.curveParams.control[1] - rule.curveParams.start[1]) * y_frac) + rule.n_start)
 
             resolution = (Math.abs(rule.end - rule.start) >= Math.abs(rule.n_end - rule.n_start)) ? Math.abs(rule.end - rule.start) * 1000 : Math.abs(rule.n_end - rule.n_start) * 1000
             var i = 0

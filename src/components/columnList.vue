@@ -26,15 +26,6 @@ export default {
     },
     props: {
         columnsList: Object
-    },
-    mounted(){
-        console.log("In columns")
-        console.log(this.columnsList.columnsList)
-        console.log(typeof(this.columnsList.columnsList))
-        this.columnsList.columnsList.forEach(element => {
-            console.log(element.name)  
-            console.log(element._id)  
-        });
     }
 }   
 </script>
@@ -47,6 +38,8 @@ export default {
         justify-content: flex-end;
         padding-right: 20px;
         text-align: right;
+        max-height: 800px;
+        overflow-y: scroll;
 
         h2{
             color: $accentBgColor;
